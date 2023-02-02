@@ -1,19 +1,23 @@
 package ai.smart.ix.model;
 
 import ai.smart.ix.model.enumeration.FeatureCategory;
+import ai.smart.ix.utils.ValidEnumValue;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class SmartFeature extends PanacheEntity {
-    private String name;
-    private String type;
 
-    @Enumerated(EnumType.STRING)
-    private FeatureCategory category;
+    @NotEmpty(message = "Name is required")
+    private String name;
+
+    @NotEmpty(message = "Feature model type is required")
+    private String modelType;
+
+    @ValidEnumValue(enumClass = FeatureCategory.class)
+    private String category;
 
     public String getName() {
         return name;
@@ -23,19 +27,19 @@ public class SmartFeature extends PanacheEntity {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getModelType() {
+        return modelType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setModelType(String modelType) {
+        this.modelType = modelType;
     }
 
-    public FeatureCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(FeatureCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 }
