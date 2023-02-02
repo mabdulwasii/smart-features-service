@@ -5,11 +5,18 @@ import ai.smart.ix.utils.ValidEnumValue;
 import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
+@Table(indexes = {
+        @Index(columnList = "name"),
+        @Index(columnList = "modelType"),
+        @Index(columnList = "category"),
+        @Index(name = "fn_type_category_index", columnList = "modelType, category")
+})
 public class SmartFeature extends PanacheEntity {
-
     @NotEmpty(message = "Name is required")
     private String name;
 
