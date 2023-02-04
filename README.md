@@ -44,18 +44,18 @@ Build the application using:
 ./mvnw clean package -Dquarkus.kubernetes.deploy=true
 ```
 
+Then deploy the application using:
+```shell script
+kubectl apply -f src/main/kubernetes/postgres-service.yml
+```
+
 
 Then deploy the application using:
 ```shell script
-kubectl apply -f target/kubernetes/kubernetes.yaml
+kubectl apply -f target/kubernetes/kubernetes.yml
 ```
 
 Or if you prefer json:
 ```shell script
 kubectl apply -f .target/kubernetes/kubernetes.json
-```
-
-And your app will be deployed in a minute, check pods list using:
-```shell
-kubectl get pod
 ```
