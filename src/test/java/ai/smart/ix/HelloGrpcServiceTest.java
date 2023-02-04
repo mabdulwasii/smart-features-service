@@ -88,7 +88,6 @@ class HelloGrpcServiceTest {
     @Test
     @DisplayName(FAIL_FEATURE_WITH_INVALID_NAME)
     void shouldFailToGetFeatureByInValidName() {
-
         Throwable th = assertThrows(Exception.class,
                 () -> service.getFeatures(featureByInValidName)
                         .await().atMost(Duration.ofSeconds(20)));
