@@ -5,6 +5,8 @@ import ai.smart.ix.repository.SmartFeatureRepository;
 import ai.smart.ix.utils.DtoTransformer;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +19,7 @@ public class FeatureGrpcService implements FeatureGrpc {
     }
 
     @Transactional
+    @Timed(name = "createFeature", unit = MetricUnits.MILLISECONDS)
     @Override
     public Uni<FeatureResponse> createFeature(FeatureRequest request) {
         return repository.persistAndFlush(
@@ -25,12 +28,14 @@ public class FeatureGrpcService implements FeatureGrpc {
     }
 
     @Override
+    @Timed(name = "getFeatureByModelTypeAndCategory", unit = MetricUnits.MILLISECONDS)
     public Uni<FeatureListResponse> getFeatureByModelTypeAndCategory(FeatureByModelTypeCategoryRequest request) {
         return repository.findByModelTypeAndCategory(request.getModelType(), request.getCategory())
                 .onItem().transform(DtoTransformer::buildFeatureListResponse);
     }
 
     @Override
+    @Timed(name = "getFeatures", unit = MetricUnits.MILLISECONDS)
     public Uni<FeatureListResponse> getFeatures(GetFeatureRequest request) {
         if (request.hasId()) {
             return repository.findById(request.getId())
