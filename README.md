@@ -29,21 +29,25 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 
 You can then execute your native executable with: `./target/smart-features-service-1.0.0-SNAPSHOT-runner`
 
-## Deploy Application to Kubernetes on Local platform
+## Deploy to kubernetes on docker desktop
 
 Install [Kubectl and Docker desktop](https://www.docker.com/products/docker-desktop/) and enable kubernetes extension.
 For more information about docker desktop [check documentation](https://docs.docker.com/desktop/)
 
-### Build the application images and deploy
+### Build and deploy the application
 
-Build postgres database using:
+Open a terminal to the application root folder.
+
+Build the application using:
+
 ```shell script
-kubectl apply -f src/main/k8s/postgresql-deployment.yaml
+./mvnw clean package -Dquarkus.kubernetes.deploy=true
 ```
 
-Then build smart-features-service application using:
+
+Then deploy the application using:
 ```shell script
-kubectl apply -f .target/kubernetes/kubernetes.yaml
+kubectl apply -f target/kubernetes/kubernetes.yaml
 ```
 
 Or if you prefer json:
