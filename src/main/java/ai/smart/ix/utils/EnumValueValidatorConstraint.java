@@ -11,7 +11,8 @@ public class EnumValueValidatorConstraint implements ConstraintValidator<ValidEn
 
     @Override
     public void initialize(ValidEnumValue validEnumValue) {
-        values = Stream.of(validEnumValue.enumClass().getEnumConstants())
+        values = Stream.of(validEnumValue.enumClass()
+                        .getEnumConstants())
                 .map(Enum::name)
                 .collect(Collectors.toList());
     }

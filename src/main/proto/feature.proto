@@ -3,50 +3,34 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "ai.smart.ix";
 option java_outer_classname = "FeatureGrpcProto";
-
-import "google/protobuf/empty.proto";
 import "validate/validate.proto";
 
 package feature;
 
 service FeatureGrpc {
-    rpc getFeatureById (FeatureByIdRequest) returns (FeatureResponse) {}
-    rpc getFeatureByName (FeatureByNameRequest) returns (FeatureResponse) {}
-    rpc getFeatureByType (FeatureByTypeRequest) returns (FeatureListResponse) {}
-    rpc getFeatureByCategory (FeatureByCategoryRequest) returns (FeatureListResponse) {}
-    rpc getFeatureByTypeAndCategory (FeatureByTypeCategoryRequest) returns (FeatureListResponse) {}
-    rpc getAllFeatures (google.protobuf.Empty) returns (FeatureListResponse) {}
-    rpc findFeatures (FindFeatureRequest) returns (FeatureListResponse) {}
+    rpc createFeature (FeatureRequest) returns (FeatureResponse) {}
+    rpc getFeatureByModelTypeAndCategory (FeatureByModelTypeCategoryRequest) returns (FeatureListResponse) {}
+    rpc getFeatures (GetFeatureRequest) returns (FeatureListResponse) {}
 }
 
-message FeatureByIdRequest {
-    int64 id = 1 [(validate.rules).int64.gt = 0];
+message FeatureRequest {
+    string name = 2 [(validate.rules).string.pattern = "/.*\\S.*/"];
+    string modelType = 3 [(validate.rules).string.pattern = "/.*\\S.*/"];
+    FeatureCategory category = 4 [(validate.rules).enum.defined_only = true];
 }
 
-message FindFeatureRequest {
+message GetFeatureRequest {
     oneof FeatureResponse {
         option (validate.required) = true;
 
         int64 id = 1;
         string name = 2;
-        string type = 3;
+        string modelType = 3;
         FeatureCategory category = 4 [(validate.rules).enum.defined_only = true];
     }
 }
 
-message FeatureByNameRequest {
-    string name = 1 [(validate.rules).string.pattern = "/.*\\S.*/"];
-}
-
-message FeatureByTypeRequest {
-    string modelType = 1 [(validate.rules).string.pattern = "/.*\\S.*/"];
-}
-
-message FeatureByCategoryRequest {
-    FeatureCategory category = 1 [(validate.rules).enum.defined_only = true];
-}
-
-message FeatureByTypeCategoryRequest {
+message FeatureByModelTypeCategoryRequest {
     string modelType = 1 [(validate.rules).string.pattern = "/.*\\S.*/"];
     FeatureCategory category = 2 [(validate.rules).enum.defined_only = true];
 }
@@ -54,7 +38,7 @@ message FeatureByTypeCategoryRequest {
 message FeatureResponse {
     int64 id = 1 [(validate.rules).int64.gt = 0];
     string name = 2 [(validate.rules).string.pattern = "/.*\\S.*/"];
-    string type = 3 [(validate.rules).string.pattern = "/.*\\S.*/"];
+    string modelType = 3 [(validate.rules).string.pattern = "/.*\\S.*/"];
     FeatureCategory category = 4 [(validate.rules).enum.defined_only = true];
 }
 
@@ -63,6 +47,6 @@ message FeatureListResponse {
 }
 
 enum FeatureCategory {
-    DEVICE = 0;
-    SERVICE = 1;
+    SERVICE = 0;
+    DEVICE = 1;
 }
